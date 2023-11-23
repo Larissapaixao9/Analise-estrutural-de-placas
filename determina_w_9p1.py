@@ -1,28 +1,31 @@
 import numpy as np
-import constantes
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+from calculos_auxiliares_deslocamento import calcular_w
 
-
-def determina_w_9p1(a,b):
-    
-    poisson = constantes.poisson
-    E = constantes.E_aco
-    c = 0.2
-    d = 0.2
-    p0 = 8
-    P = p0/(4*c*d)
+def determina_w_9p1():
+    a = 4
+    b = 4
     t = 0.01
-    D = (E*t**2)/(12*(1-poisson**2))
-    m=2
-    n=2
-    y = b/2
-    x = a/2
+    E = 200000
+    m = 1
+    n = 1
+    p0 = 10
+    poisson = 0.3
+    D = (E * t**2) / (12 * (1 - poisson**2))
+    x = np.linspace(0, a, 100)
+    y = np.linspace(0, b, 100)
+    X, Y = np.meshgrid(x, y)
 
-    a = np.linspace(0, 8, 100)  # Intervalo para a
-    b = np.linspace(0, 16, 100)  # Intervalo para b
+    N_values = [1, 5000, 50000, 500000]
+    for i, N in enumerate(N_values):
+        Z = calcular_w(X, Y, N,p0,a,D,b)
+        fig = plt.figure()
+        ax = fig.add_subplot(111, projection='3d')
+        ax.plot_surface(X, Y, Z, cmap='viridis')
+        ax.set_xlabel('X')
+        ax.set_ylabel('Y')
+        ax.set_zlabel('w')
+        ax.set_title(f'N = {N}')
+        plt.show()
 
-    a, b = np.meshgrid(a, b)
-
-    # Calcular os valores de w
-    w = ((4*P)/(np.pi**4 * D*a*b)) * ((-1)**(((m+n)/2)-1)) * ((np.sin(m*np.pi*x/a) * np.sin(n*np.pi*y/b))/(((m/a)**2 + (n/b)**2))**2)
-
-    return a,b,w

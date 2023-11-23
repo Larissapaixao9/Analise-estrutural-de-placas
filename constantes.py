@@ -1,6 +1,6 @@
 poisson = 0.3
-po = 7 #Em Newtons
-E_aco = 120e9 #GPA
+po = 5e3 #Em Newtons
+E_aco = 70e9 #GPA
 t = 0.01
 a = 5
 b = 5
